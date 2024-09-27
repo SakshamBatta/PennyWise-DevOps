@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./SideBar";
-import Logout from "./Logout";
+// import NavBar from "./Navbar";
+import axios from "axios";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 export default function Dashboard() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showCategories, setShowCategories] = useState(false);
   const navigate = useNavigate();
 
-  // Function to fetch categories
   const fetchCategories = async () => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
-        // Redirect to login if no token is found
         navigate("/login");
         return;
       }
@@ -23,9 +22,7 @@ export default function Dashboard() {
       const response = await axios.get(
         "http://localhost:3000/api/category/get",
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       setCategories(response.data);
@@ -41,135 +38,127 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
-      <div className="flex-grow p-10 bg-gradient-to-b from-gray-50 to-gray-200">
-        {/* Header Section */}
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-4xl font-extrabold text-gray-800">
-            Dashboard Overview
-          </h1>
-          <Logout />
-        </div>
-
+    <div className="flex min-h-screen bg-gray-900 text-gray-200">
+      <Sidebar
+        categories={categories}
+        loading={loading}
+        showCategories={showCategories}
+        setShowCategories={setShowCategories}
+      />
+      <div className="flex-grow p-10 bg-gray-800">
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Income Card */}
-          <div className="bg-green-500 shadow-lg rounded-lg p-6 flex items-center justify-between transition-transform transform hover:scale-105 hover:shadow-xl text-white">
-            <div>
-              <h2 className="text-lg font-medium">Income</h2>
-              <p className="text-3xl font-bold">$0.00</p>
-              <div className="flex items-center mt-2">
-                <FaArrowUp className="mr-1" />
-                <span className="text-sm">+12% from last month</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+          {[
+            {
+              title: "Income",
+              amount: "$0.00",
+              change: "+12% from last month",
+              icon: <FaArrowUp className="mr-1" />,
+              color: "bg-green-600",
+              imgSrc: "/income.png",
+            },
+            {
+              title: "Expenses",
+              amount: "$0.00",
+              change: "-8% from last month",
+              icon: <FaArrowDown className="mr-1" />,
+              color: "bg-red-600",
+              imgSrc: "/expenses.png",
+            },
+            {
+              title: "Balance",
+              amount: "$0.00",
+              change: "+5% from last month",
+              icon: <FaArrowUp className="mr-1" />,
+              color: "bg-blue-600",
+              imgSrc: "/balance.png",
+            },
+          ].map((card, index) => (
+            <div
+              key={index}
+              className={`shadow-lg rounded-lg p-4 flex items-center justify-between transition-transform transform hover:scale-105 hover:shadow-xl text-white ${card.color}`}
+            >
+              <div>
+                <h2 className="text-lg font-medium">{card.title}</h2>
+                <p className="text-3xl font-bold">{card.amount}</p>
+                <div className="flex items-center mt-2">
+                  {card.icon}
+                  <span className="text-sm">{card.change}</span>
+                </div>
               </div>
+              <img src={card.imgSrc} alt={card.title} className="w-12 h-12" />
             </div>
-            <img src="/income.png" alt="Income" className="w-12 h-12" />
-          </div>
-
-          {/* Expenses Card */}
-          <div className="bg-red-500 shadow-lg rounded-lg p-6 flex items-center justify-between transition-transform transform hover:scale-105 hover:shadow-xl text-white">
-            <div>
-              <h2 className="text-lg font-medium">Expenses</h2>
-              <p className="text-3xl font-bold">$0.00</p>
-              <div className="flex items-center mt-2">
-                <FaArrowDown className="mr-1" />
-                <span className="text-sm">-8% from last month</span>
-              </div>
-            </div>
-            <img src="/expenses.png" alt="Expenses" className="w-12 h-12" />
-          </div>
-
-          {/* Balance Card */}
-          <div className="bg-blue-500 shadow-lg rounded-lg p-6 flex items-center justify-between transition-transform transform hover:scale-105 hover:shadow-xl text-white">
-            <div>
-              <h2 className="text-lg font-medium">Balance</h2>
-              <p className="text-3xl font-bold">$0.00</p>
-              <div className="flex items-center mt-2">
-                <FaArrowUp className="mr-1" />
-                <span className="text-sm">+5% from last month</span>
-              </div>
-            </div>
-            <img src="/balance.png" alt="Balance" className="w-12 h-12" />
-          </div>
+          ))}
         </div>
 
-        {/* Charts and Category Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {/* Expense Chart Placeholder */}
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              Monthly Expenses Overview
-            </h2>
-            <div className="h-48 bg-gray-200 flex items-center justify-center rounded-md">
-              <p className="text-gray-500">[Expense Chart Placeholder]</p>
-            </div>
-          </div>
-
-          {/* Category Overview */}
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Categories</h2>
-            {loading ? (
-              <p className="text-gray-500">Loading categories...</p>
-            ) : (
-              <div className="grid grid-cols-2 gap-4">
-                {categories.map((category) => (
-                  <div
-                    key={category.id}
-                    className="bg-blue-300 border border-gray-300 rounded-md p-4 flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-lg"
-                  >
-                    <p className="text-gray-800 font-semibold text-center">
-                      {category.name}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
+        {/* Chart Section */}
+        <div className="bg-gray-700 shadow-lg rounded-lg p-4 mb-4">
+          <h2 className="text-lg font-bold text-gray-100 mb-2">
+            Performance Overview
+          </h2>
+          <div className="h-48 bg-gray-600 flex items-center justify-center">
+            <span className="text-gray-400">
+              Chart will be implemented here
+            </span>
           </div>
         </div>
 
         {/* Recent Transactions */}
-        <div className="bg-white shadow-lg rounded-lg p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
+        <div className="bg-gray-700 shadow-lg rounded-lg p-6">
+          <h2 className="text-xl font-bold text-gray-100 mb-4">
             Recent Transactions
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left">
               <thead>
-                <tr className="border-b">
-                  <th className="py-3 px-6 text-sm font-medium text-gray-500 uppercase tracking-wider">
-                    Description
-                  </th>
-                  <th className="py-3 px-6 text-sm font-medium text-gray-500 uppercase tracking-wider">
-                    Amount
-                  </th>
-                  <th className="py-3 px-6 text-sm font-medium text-gray-500 uppercase tracking-wider">
-                    Date
-                  </th>
-                  <th className="py-3 px-6 text-sm font-medium text-gray-500 uppercase tracking-wider">
-                    Category
-                  </th>
+                <tr className="border-b border-gray-600">
+                  {["Description", "Amount", "Date", "Category"].map(
+                    (header) => (
+                      <th
+                        key={header}
+                        className="py-3 px-6 text-sm font-medium text-gray-400 uppercase tracking-wider"
+                      >
+                        {header}
+                      </th>
+                    )
+                  )}
                 </tr>
               </thead>
               <tbody>
-                <tr className="hover:bg-gray-100">
-                  <td className="py-4 px-6 text-sm text-gray-900">Groceries</td>
-                  <td className="py-4 px-6 text-sm text-red-600">-$50.00</td>
-                  <td className="py-4 px-6 text-sm text-gray-500">
-                    2024-09-26
-                  </td>
-                  <td className="py-4 px-6 text-sm text-gray-500">Food</td>
-                </tr>
-                <tr className="hover:bg-gray-100">
-                  <td className="py-4 px-6 text-sm text-gray-900">
-                    Freelance Payment
-                  </td>
-                  <td className="py-4 px-6 text-sm text-green-600">+$500.00</td>
-                  <td className="py-4 px-6 text-sm text-gray-500">
-                    2024-09-25
-                  </td>
-                  <td className="py-4 px-6 text-sm text-gray-500">Income</td>
-                </tr>
+                {[
+                  {
+                    description: "Groceries",
+                    amount: "-$50.00",
+                    date: "2024-09-26",
+                    category: "Food",
+                    amountClass: "text-red-300",
+                  },
+                  {
+                    description: "Freelance Payment",
+                    amount: "+$500.00",
+                    date: "2024-09-25",
+                    category: "Income",
+                    amountClass: "text-green-300",
+                  },
+                  // Add more transactions as needed
+                ].map((transaction, index) => (
+                  <tr key={index} className="hover:bg-gray-600">
+                    <td className="py-4 px-6 text-sm text-gray-200">
+                      {transaction.description}
+                    </td>
+                    <td
+                      className={`py-4 px-6 text-sm ${transaction.amountClass}`}
+                    >
+                      {transaction.amount}
+                    </td>
+                    <td className="py-4 px-6 text-sm text-gray-400">
+                      {transaction.date}
+                    </td>
+                    <td className="py-4 px-6 text-sm text-gray-400">
+                      {transaction.category}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

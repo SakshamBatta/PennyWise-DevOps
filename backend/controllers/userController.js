@@ -77,4 +77,70 @@ const loginUser = async (req, res) => {
   });
 };
 
-module.exports = { registerUser, loginUser };
+const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+const updateUserProfile = async (req, res) => {
+  const {
+    name,
+    email,
+    password,
+    profilePicture,
+    notificationPreferences,
+    address,
+    phone,
+    dob,
+  } = req.body;
+
+  // Validate input
+  if (!name || !email) {
+    return res.status(400).json({ message: "Name and email are required" });
+  }
+
+  try {
+    const user = await User.findById(req.user.id);
+
+    // Update fields
+    user.name = name;
+    user.email = email;
+    user.profilePicture = profilePicture || user.profilePicture;
+    user.notificationPreferences =
+      notificationPreferences || user.notificationPreferences;
+    user.address = address || user.address;
+    user.phone = phone || user.phone;
+    user.dob = dob || user.dob;
+
+    // Hash password if provided
+    if (password) {
+      user.password = await bcrypt.hash(password, 10);
+    }
+
+    await user.save();
+    res.json({ message: "Profile updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+const deleteUserAccount = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.user.id);
+    res.json({ message: "Account deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getUserProfile,
+  updateUserProfile,
+  deleteUserAccount,
+};

@@ -35,14 +35,14 @@ const AddCategory = ({ onCategoryAdded }) => {
   return (
     <div className="mb-4">
       <form onSubmit={handleSubmit}>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-white">
           New Category
         </label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md"
+          className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md text-black"
           placeholder="Category name"
         />
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}

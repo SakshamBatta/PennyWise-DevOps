@@ -4,6 +4,7 @@ import Signup from "./components/Signup";
 import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import Category from "./components/Category";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/categories" element={<Category />} />
+        <Route path="/profile" element={<UserProfile />} />
 
         <Route
           path="/dashboard"
