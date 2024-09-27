@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import Sidebar from "./SideBar";
-// import NavBar from "./Navbar";
+import Sidebar from "./Sidebar";
 import axios from "axios";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [categories, setCategories] = useState([]);
+  const [recentTransactions, setRecentTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCategories, setShowCategories] = useState(false);
   const navigate = useNavigate();
 
+  // Fetch categories
   const fetchCategories = async () => {
     try {
       const token = localStorage.getItem("authToken");
@@ -33,8 +34,30 @@ export default function Dashboard() {
     }
   };
 
+  // Fetch recent transactions
+  const fetchRecentTransactions = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      const response = await axios.get(
+        "http://localhost:3000/api/transaction/user/get/recent", // Adjust the endpoint to match your backend
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setRecentTransactions(response.data); // Assuming response.data contains the recent transactions
+    } catch (error) {
+      console.log("Failed to fetch recent transactions:", error.message);
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
+    fetchRecentTransactions(); // Fetch recent transactions on component mount
   }, []);
 
   return (
@@ -51,7 +74,7 @@ export default function Dashboard() {
           {[
             {
               title: "Income",
-              amount: "$0.00",
+              amount: "₹0.00",
               change: "+12% from last month",
               icon: <FaArrowUp className="mr-1" />,
               color: "bg-green-600",
@@ -59,7 +82,7 @@ export default function Dashboard() {
             },
             {
               title: "Expenses",
-              amount: "$0.00",
+              amount: "₹0.00",
               change: "-8% from last month",
               icon: <FaArrowDown className="mr-1" />,
               color: "bg-red-600",
@@ -67,7 +90,7 @@ export default function Dashboard() {
             },
             {
               title: "Balance",
-              amount: "$0.00",
+              amount: "₹0.00",
               change: "+5% from last month",
               icon: <FaArrowUp className="mr-1" />,
               color: "bg-blue-600",
@@ -125,40 +148,43 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  {
-                    description: "Groceries",
-                    amount: "-$50.00",
-                    date: "2024-09-26",
-                    category: "Food",
-                    amountClass: "text-red-300",
-                  },
-                  {
-                    description: "Freelance Payment",
-                    amount: "+$500.00",
-                    date: "2024-09-25",
-                    category: "Income",
-                    amountClass: "text-green-300",
-                  },
-                  // Add more transactions as needed
-                ].map((transaction, index) => (
-                  <tr key={index} className="hover:bg-gray-600">
-                    <td className="py-4 px-6 text-sm text-gray-200">
-                      {transaction.description}
-                    </td>
+                {recentTransactions.length === 0 ? (
+                  <tr>
                     <td
-                      className={`py-4 px-6 text-sm ${transaction.amountClass}`}
+                      colSpan="4"
+                      className="text-center py-4 px-6 text-gray-400"
                     >
-                      {transaction.amount}
-                    </td>
-                    <td className="py-4 px-6 text-sm text-gray-400">
-                      {transaction.date}
-                    </td>
-                    <td className="py-4 px-6 text-sm text-gray-400">
-                      {transaction.category}
+                      No recent transactions available.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  recentTransactions.map((transaction, index) => (
+                    <tr key={index} className="hover:bg-gray-600">
+                      <td className="py-4 px-6 text-sm text-gray-200">
+                        {transaction.description}
+                      </td>
+                      <td
+                        className={`py-4 px-6 text-sm ${
+                          transaction.amount < 0
+                            ? "text-red-300"
+                            : "text-green-300"
+                        }`}
+                      >
+                        {transaction.amount < 0
+                          ? `₹${Math.abs(transaction.amount)}`
+                          : `₹${transaction.amount}`}
+                      </td>
+                      <td className="py-4 px-6 text-sm text-gray-400">
+                        {new Date(
+                          transaction.transactionDate
+                        ).toLocaleDateString()}
+                      </td>
+                      <td className="py-4 px-6 text-sm text-gray-400">
+                        {transaction.category.name}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

@@ -3,24 +3,13 @@ const mongoose = require("mongoose");
 // Define the Transaction Schema
 const transactionSchema = new mongoose.Schema(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId, // Reference to the user
       ref: "User",
       required: true,
     },
     amount: {
       type: Number,
-      required: true,
-      min: 0, // Ensure the amount is positive
-    },
-    transactionType: {
-      type: String,
-      enum: ["credit", "debit"], // Ensure it's either 'credit' or 'debit'
-      required: true,
-    },
-    paymentMethod: {
-      type: String,
-      enum: ["card", "bank_transfer", "upi", "cash"], // You can add more payment methods as needed
       required: true,
     },
     description: {
@@ -30,6 +19,11 @@ const transactionSchema = new mongoose.Schema(
     transactionDate: {
       type: Date,
       default: Date.now, // Defaults to the current date
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
     },
   },
   {
