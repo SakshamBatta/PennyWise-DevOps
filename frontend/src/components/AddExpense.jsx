@@ -51,14 +51,14 @@ export default function AddExpense() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200 flex items-center justify-center">
-      <div className="w-full max-w-xl bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold text-gray-100 mb-6 text-center">
+    <div className="min-h-screen bg-gray-200 text-gray-800 flex items-center justify-center">
+      <div className="w-full max-w-xl bg-white p-8 rounded-lg shadow-lg">
+        <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
           Add New Expense
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label className="block text-gray-400 mb-2 text-sm uppercase tracking-wide">
+            <label className="block text-gray-600 mb-2 text-sm uppercase tracking-wide">
               Description
             </label>
             <input
@@ -66,13 +66,13 @@ export default function AddExpense() {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="w-full px-4 py-3 bg-gray-100 text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               placeholder="Enter description"
               required
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-400 mb-2 text-sm uppercase tracking-wide">
+            <label className="block text-gray-600 mb-2 text-sm uppercase tracking-wide">
               Amount (₹)
             </label>
             <input
@@ -80,13 +80,13 @@ export default function AddExpense() {
               name="amount"
               value={formData.amount}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="w-full px-4 py-3 bg-gray-100 text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               placeholder="Enter amount"
               required
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-400 mb-2 text-sm uppercase tracking-wide">
+            <label className="block text-gray-600 mb-2 text-sm uppercase tracking-wide">
               Date
             </label>
             <input
@@ -94,19 +94,19 @@ export default function AddExpense() {
               name="date"
               value={formData.date}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="w-full px-4 py-3 bg-gray-100 text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               required
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-400 mb-2 text-sm uppercase tracking-wide">
+            <label className="block text-gray-600 mb-2 text-sm uppercase tracking-wide">
               Category
             </label>
             <select
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="w-full px-4 py-3 bg-gray-100 text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               required
             >
               <option value="">Select a category</option>

@@ -1,0 +1,62 @@
+/* Signup.css */
+
+.min-h-screen {
+    background-color: #f0f4f8; /* Softer light background */
+  }
+  
+  .signup-card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .signup-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db; /* Light gray border */
+    border-radius: 0.375rem; /* Rounded corners */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #f8fafc; /* Softer input background */
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: #3b82f6; /* Blue color on focus */
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); /* Softer blue glow */
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 0.375rem; /* Rounded corners */
+    background: linear-gradient(90deg, #3b82f6, #06b6d4); /* Muted gradient */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  
+  .submit-button:hover {
+    background: linear-gradient(90deg, #06b6d4, #3b82f6); /* Inverted gradient on hover */
+    transform: scale(1.02); /* Slightly larger on hover */
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

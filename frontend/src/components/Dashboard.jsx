@@ -27,6 +27,7 @@ ChartJS.register(
 export default function Dashboard() {
   const [categories, setCategories] = useState([]);
   const [recentExpenses, setRecentExpenses] = useState([]);
+  const [recentIncome, setRecentIncome] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCategories, setShowCategories] = useState(false);
   const [totalIncome, setTotalIncome] = useState(0.0);
@@ -48,11 +49,7 @@ export default function Dashboard() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      let total = 0;
-      response.data.map((inc) => {
-        total += inc.amount;
-      });
-
+      let total = response.data.reduce((acc, inc) => acc + inc.amount, 0);
       setTotalIncome(total);
     } catch (error) {
       console.log(error.message);
@@ -73,11 +70,7 @@ export default function Dashboard() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      let total = 0;
-      response.data.map((exp) => {
-        total += exp.amount;
-      });
-
+      let total = response.data.reduce((acc, exp) => acc + exp.amount, 0);
       setTotalExpense(total);
     } catch (error) {
       console.log(error.message);
@@ -85,8 +78,7 @@ export default function Dashboard() {
   };
 
   const balanceCalculator = async () => {
-    let balance = totalIncome - totalExpense;
-    setBalance(balance);
+    setBalance(totalIncome - totalExpense);
   };
 
   const fetchCategories = async () => {
@@ -131,6 +123,26 @@ export default function Dashboard() {
     }
   };
 
+  const fetchRecentIncome = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      const response = await axios.get(
+        "http://localhost:3000/api/income/get/recent",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setRecentIncome(response.data);
+    } catch (error) {
+      console.log("Failed to fetch recent income:", error.message);
+    }
+  };
+
   useEffect(() => {
     balanceCalculator();
   }, [totalExpense, totalIncome]);
@@ -140,6 +152,7 @@ export default function Dashboard() {
     fetchRecentExpenses();
     totalIncomeCalculator();
     totalExpenseCalculator();
+    fetchRecentIncome();
   }, []);
 
   const pieData = {
@@ -148,8 +161,8 @@ export default function Dashboard() {
       {
         label: "Financial Summary",
         data: [totalIncome, totalExpense, balance],
-        backgroundColor: ["#00C9A7", "#FF6F61", "#3B82F6"],
-        borderColor: ["#00C9A7", "#FF6F61", "#3B82F6"],
+        backgroundColor: ["#4F46E5", "#F472B6", "#3B82F6"], // Updated colors
+        borderColor: ["#4F46E5", "#F472B6", "#3B82F6"],
         borderWidth: 1,
         hoverOffset: 4,
       },
@@ -162,41 +175,44 @@ export default function Dashboard() {
       {
         label: "Amount in ₹",
         data: [totalIncome, totalExpense, balance],
-        backgroundColor: ["#00C9A7", "#FF6F61", "#3B82F6"],
-        borderColor: ["#00C9A7", "#FF6F61", "#3B82F6"],
+        backgroundColor: ["#4F46E5", "#F472B6", "#3B82F6"], // Updated colors
+        borderColor: ["#4F46E5", "#F472B6", "#3B82F6"],
         borderWidth: 1,
       },
     ],
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-800 text-gray-100">
+    <div className="flex min-h-screen bg-gray-100 text-gray-900">
+      {" "}
+      {/* Updated Background and Text color */}
       <Sidebar
         categories={categories}
         loading={loading}
         showCategories={showCategories}
         setShowCategories={setShowCategories}
       />
-      <div className="flex-grow p-10">
+      <div className="flex-grow p-10 bg-gray-200">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {[
+            // Updated Cards
             {
               title: "Income",
               amount: `₹${totalIncome}`,
-              color: "bg-gradient-to-r from-teal-400 to-green-500",
+              color: "bg-gradient-to-r from-blue-500 to-indigo-500", // Updated color gradient
               imgSrc: "/income.png",
             },
             {
               title: "Expenses",
               amount: `₹${totalExpense}`,
-              color: "bg-gradient-to-r from-red-500 to-pink-600",
+              color: "bg-gradient-to-r from-pink-500 to-red-500", // Updated color gradient
               imgSrc: "/expenses.png",
             },
             {
               title: "Balance",
               amount: `₹${balance}`,
-              color: "bg-gradient-to-r from-blue-500 to-indigo-600",
+              color: "bg-gradient-to-r from-green-500 to-teal-500", // Updated color gradient
               imgSrc: "/balance.png",
             },
           ].map((card, index) => (
@@ -216,23 +232,27 @@ export default function Dashboard() {
         {/* Chart Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Pie Chart */}
-          <div className="bg-gray-700 shadow-lg rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-100 mb-4">
+          <div className="bg-white shadow-lg rounded-lg p-6">
+            {" "}
+            {/* Updated background color */}
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
               Financial Overview (Pie Chart)
             </h2>
             <div className="h-56 flex items-center justify-center">
               <Pie
                 data={pieData}
                 options={{
-                  plugins: { legend: { labels: { color: "white" } } },
+                  plugins: { legend: { labels: { color: "black" } } }, // Updated legend color
                 }}
               />
             </div>
           </div>
 
           {/* Bar Chart */}
-          <div className="bg-gray-700 shadow-lg rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-100 mb-4">
+          <div className="bg-white shadow-lg rounded-lg p-6">
+            {" "}
+            {/* Updated background color */}
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
               Financial Overview (Bar Chart)
             </h2>
             <div className="h-56 flex items-center justify-center">
@@ -240,10 +260,10 @@ export default function Dashboard() {
                 data={barData}
                 options={{
                   scales: {
-                    y: { ticks: { color: "white" } },
-                    x: { ticks: { color: "white" } },
+                    y: { ticks: { color: "black" } }, // Updated tick color
+                    x: { ticks: { color: "black" } }, // Updated tick color
                   },
-                  plugins: { legend: { labels: { color: "white" } } },
+                  plugins: { legend: { labels: { color: "black" } } }, // Updated legend color
                 }}
               />
             </div>
@@ -251,19 +271,21 @@ export default function Dashboard() {
         </div>
 
         {/* Recent expenses */}
-        <div className="bg-gray-700 shadow-lg rounded-lg p-6 mt-8">
-          <h2 className="text-xl font-semibold text-gray-100 mb-4">
+        <div className="bg-white shadow-lg rounded-lg p-6 mt-8">
+          {" "}
+          {/* Updated background color */}
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Recent Expenses
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left">
               <thead>
-                <tr className="border-b border-gray-600">
+                <tr className="border-b border-gray-600 text-center">
                   {["Description", "Amount", "Date", "Category"].map(
                     (header) => (
                       <th
                         key={header}
-                        className="py-3 px-6 text-sm font-medium text-gray-400 uppercase tracking-wider"
+                        className="py-3 px-6 text-sm font-medium text-gray-600 uppercase tracking-wider"
                       >
                         {header}
                       </th>
@@ -271,7 +293,7 @@ export default function Dashboard() {
                   )}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {recentExpenses.length === 0 ? (
                   <tr>
                     <td
@@ -282,22 +304,68 @@ export default function Dashboard() {
                     </td>
                   </tr>
                 ) : (
-                  recentExpenses.map((expense, index) => (
+                  recentExpenses.map((expense) => (
                     <tr
-                      key={index}
-                      className="border-b border-gray-600 hover:bg-gray-600 transition-colors"
+                      key={expense.id}
+                      className="border-b border-gray-200 hover:bg-gray-100"
                     >
-                      <td className="py-4 px-6 text-gray-300">
-                        {expense.description}
-                      </td>
-                      <td className="py-4 px-6 text-gray-300">
+                      <td className="py-4 px-6">{expense.description}</td>
+                      <td className="py-4 px-6 text-red-700 font-normal">
                         ₹{expense.amount}
                       </td>
-                      <td className="py-4 px-6 text-gray-300">
+                      <td className="py-4 px-6">
                         {new Date(expense.expenseDate).toLocaleDateString()}
                       </td>
-                      <td className="py-4 px-6 text-gray-300">
-                        {expense.category.name}
+                      <td className="py-4 px-6">{expense.category.name}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="bg-white shadow-lg rounded-lg p-6 mt-8">
+          {" "}
+          {/* Updated background color */}
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Recent Income
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left">
+              <thead>
+                <tr className="border-b border-gray-600 text-center">
+                  {["Source", "Amount", "Date"].map((header) => (
+                    <th
+                      key={header}
+                      className="py-3 px-6 text-sm font-medium text-gray-600 uppercase tracking-wider"
+                    >
+                      {header}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="text-center">
+                {recentIncome.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="4"
+                      className="text-center py-4 px-6 text-gray-400"
+                    >
+                      No recent income available.
+                    </td>
+                  </tr>
+                ) : (
+                  recentIncome.map((income) => (
+                    <tr
+                      key={income.id}
+                      className="border-b border-gray-200 hover:bg-gray-100"
+                    >
+                      <td className="py-4 px-6">{income.source}</td>
+                      <td className="py-4 px-6 text-red-700 font-normal">
+                        ₹{income.amount}
+                      </td>
+                      <td className="py-4 px-6">
+                        {new Date(income.date).toLocaleDateString()}
                       </td>
                     </tr>
                   ))

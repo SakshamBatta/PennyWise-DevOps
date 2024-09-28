@@ -5,7 +5,7 @@ import {
   FaList,
   FaSignOutAlt,
   FaUser,
-  FaDollarSign, // Import a suitable icon for income
+  FaDollarSign,
 } from "react-icons/fa";
 
 export default function Sidebar() {
@@ -17,28 +17,27 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="bg-gray-900 text-white w-48 min-h-screen p-5 shadow-md">
+    <div className="bg-gray-700 text-white w-48 min-h-screen p-5 shadow-md font-bold">
       <div className="flex justify-between items-center mb-5">
-        <h2 className="text-2xl font-bold">Dashboard</h2>
+        <Link className="text-2xl font-bold" to="/dashboard">
+          Dashboard
+        </Link>
       </div>
       <ul>
-        <li className="mb-3 hover:bg-gray-800 rounded">
-          <Link
-            to="/dashboard"
-            className="flex items-center p-2 hover:text-gray-300"
-          >
-            <FaHome className="mr-2" /> Dashboard
+        <li className="mb-3 hover:bg-gray-800 rounded transition duration-200">
+          <Link to="/" className="flex items-center p-2 hover:text-gray-300">
+            <FaHome className="mr-2" /> Home
           </Link>
         </li>
-        <li className="mb-3 hover:bg-gray-800 rounded">
+        <li className="mb-3 hover:bg-gray-800 rounded transition duration-200">
           <Link
-            to="/income" // Add the income route here
+            to="/income"
             className="flex items-center p-2 hover:text-gray-300"
           >
             <FaDollarSign className="mr-2" /> Income
           </Link>
         </li>
-        <li className="mb-3 hover:bg-gray-800 rounded">
+        <li className="mb-3 hover:bg-gray-800 rounded transition duration-200">
           <Link
             to="/categories"
             className="flex items-center p-2 hover:text-gray-300"
@@ -46,7 +45,7 @@ export default function Sidebar() {
             <FaList className="mr-2" /> Categories
           </Link>
         </li>
-        <li className="mb-3 hover:bg-gray-800 rounded">
+        <li className="mb-3 hover:bg-gray-800 rounded transition duration-200">
           <Link
             to="/expense"
             className="flex items-center p-2 hover:text-gray-300"
@@ -54,15 +53,8 @@ export default function Sidebar() {
             <FaChartBar className="mr-2" /> Expenses
           </Link>
         </li>
-        <li className="mb-3 hover:bg-gray-800 rounded">
-          <Link
-            to="/reports"
-            className="flex items-center p-2 hover:text-gray-300"
-          >
-            <FaSignOutAlt className="mr-2" /> Reports
-          </Link>
-        </li>
-        <li className="mb-3 hover:bg-gray-800 rounded">
+
+        <li className="mb-3 hover:bg-gray-800 rounded transition duration-200">
           <Link
             to="/profile"
             className="flex items-center p-2 hover:text-gray-300"
@@ -70,7 +62,7 @@ export default function Sidebar() {
             <FaUser className="mr-2" /> Profile
           </Link>
         </li>
-        <li className="mb-3 hover:bg-gray-800 rounded">
+        <li className="mb-3 hover:bg-gray-800 rounded transition duration-200">
           <button
             onClick={handleLogout}
             className="flex items-center p-2 w-full text-left hover:text-gray-300"

@@ -9,8 +9,8 @@ export default function Income() {
   const [loading, setLoading] = useState(true);
   const [amount, setAmount] = useState("");
   const [source, setSource] = useState("");
-  const [selectedEntry, setSelectedEntry] = useState(null); // State for selected entry
-  const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
+  const [selectedEntry, setSelectedEntry] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const navigate = useNavigate();
 
   // Fetch income entries
@@ -53,9 +53,9 @@ export default function Income() {
 
   const handleEdit = (entry) => {
     setSelectedEntry(entry);
-    setAmount(entry.amount); // Set amount to current value
-    setSource(entry.source); // Set source to current value
-    setModalVisible(true); // Open the modal
+    setAmount(entry.amount);
+    setSource(entry.source);
+    setModalVisible(true);
   };
 
   const handleUpdate = async () => {
@@ -76,20 +76,20 @@ export default function Income() {
         )
       );
 
-      setModalVisible(false); // Close modal after update
+      setModalVisible(false);
     } catch (error) {
       console.error("Failed to update transaction:", error.message);
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-900 text-gray-200">
+    <div className="flex min-h-screen bg-white text-gray-800">
       <Sidebar loading={loading} />
-      <div className="flex-grow p-10">
+      <div className="flex-grow p-10 bg-gray-200">
         {/* Add Income Button */}
         <div className="mb-6 text-center">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-100">Income</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Income</h2>
             <button
               className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500"
               onClick={() => navigate("/add-income")}
@@ -100,18 +100,18 @@ export default function Income() {
         </div>
 
         {/* Income Entries Table */}
-        <div className="bg-gray-800 shadow-lg rounded-lg p-8 mt-6">
-          <h2 className="text-2xl font-bold text-gray-100 mb-6">
+        <div className=" shadow-lg rounded-lg p-8 mt-6 bg-white">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Income Entries
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left">
               <thead>
-                <tr className="bg-gray-700 border-b border-gray-600">
+                <tr className="bg-gray-200 border-b border-gray-300">
                   {["Source", "Amount", "Date", "Action"].map((header) => (
                     <th
                       key={header}
-                      className="py-3 px-6 text-sm font-medium text-gray-400 uppercase tracking-wider"
+                      className="py-3 px-6 text-sm font-medium text-gray-600 uppercase tracking-wider"
                     >
                       {header}
                     </th>
@@ -123,32 +123,32 @@ export default function Income() {
                   <tr>
                     <td
                       colSpan="4"
-                      className="text-center py-4 px-6 text-gray-400"
+                      className="text-center py-4 px-6 text-gray-600"
                     >
                       No income entries available.
                     </td>
                   </tr>
                 ) : (
                   incomeEntries.map((entry, index) => (
-                    <tr key={index} className="hover:bg-gray-700 transition">
-                      <td className="py-4 px-6 text-sm text-gray-200">
+                    <tr key={index} className="hover:bg-gray-200 transition">
+                      <td className="py-4 px-6 text-sm text-gray-800">
                         {entry.source}
                       </td>
-                      <td className="py-4 px-6 text-sm text-green-300">
+                      <td className="py-4 px-6 text-sm text-green-600">
                         ₹{entry.amount}
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-400">
+                      <td className="py-4 px-6 text-sm text-gray-600">
                         {new Date(entry.date).toLocaleDateString()}
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-400 flex items-center">
+                      <td className="py-4 px-6 text-sm text-gray-600 flex items-center">
                         <button
-                          className="text-blue-500 hover:text-blue-400 mr-3"
-                          onClick={() => handleEdit(entry)} // Call handleEdit instead of navigate
+                          className="text-blue-600 hover:text-blue-500 mr-3"
+                          onClick={() => handleEdit(entry)}
                         >
                           <FaEdit />
                         </button>
                         <button
-                          className="text-red-500 hover:text-red-400"
+                          className="text-red-600 hover:text-red-500"
                           onClick={() => handleDelete(entry._id)}
                         >
                           <FaTrash />
@@ -170,22 +170,22 @@ export default function Income() {
           <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
           {/* Modal */}
           <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="bg-gray-800 rounded-lg p-6 w-96">
-              <h3 className="text-lg font-bold text-gray-100 mb-4">
+            <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">
                 Edit Income
               </h3>
               <div>
-                <label className="block text-gray-400 mb-2">Source</label>
+                <label className="block text-gray-700 mb-2">Source</label>
                 <input
                   type="text"
-                  className="w-full p-2 rounded-lg bg-gray-700 text-gray-200 mb-4"
+                  className="w-full p-2 rounded-lg bg-gray-200 text-gray-800 mb-4"
                   value={source}
                   onChange={(e) => setSource(e.target.value)}
                 />
-                <label className="block text-gray-400 mb-2">Amount</label>
+                <label className="block text-gray-700 mb-2">Amount</label>
                 <input
                   type="number"
-                  className="w-full p-2 rounded-lg bg-gray-700 text-gray-200 mb-4"
+                  className="w-full p-2 rounded-lg bg-gray-200 text-gray-800 mb-4"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                 />

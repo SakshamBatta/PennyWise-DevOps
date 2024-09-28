@@ -23,7 +23,7 @@ export default function Expense() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setExpenses(response.data); 
+      setExpenses(response.data);
     } catch (error) {
       console.log(error.message);
     } finally {
@@ -48,12 +48,12 @@ export default function Expense() {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-gray-900 text-gray-200">
+    <div className="flex min-h-screen bg-white text-gray-800">
       <Sidebar />
-      <div className="flex-grow p-10 bg-gray-800">
+      <div className="flex-grow p-10  bg-gray-200">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-100">Expenses</h2>
+        <div className="flex justify-between items-center mb-6 ">
+          <h2 className="text-2xl font-bold text-gray-800">Expenses</h2>
           <button
             className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500"
             onClick={() => navigate("/add-expense")}
@@ -63,17 +63,17 @@ export default function Expense() {
         </div>
 
         {/* Expenses Table */}
-        <div className="bg-gray-700 shadow-lg rounded-lg p-6">
-          <h3 className="text-xl font-bold text-gray-100 mb-4">All Expenses</h3>
+        <div className="bg-white shadow-lg rounded-lg p-6 ">
+          <h3 className="text-xl font-bold text-gray-800 mb-4">All Expenses</h3>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left">
               <thead>
-                <tr className="border-b border-gray-600">
+                <tr className="bg-gray-200 border-b border-gray-300">
                   {["Description", "Amount", "Date", "Category", "Actions"].map(
                     (header) => (
                       <th
                         key={header}
-                        className="py-3 px-6 text-sm font-medium text-gray-400 uppercase tracking-wider"
+                        className="py-3 px-6 text-sm font-medium text-gray-600 uppercase tracking-wider"
                       >
                         {header}
                       </th>
@@ -96,35 +96,34 @@ export default function Expense() {
                   </tr>
                 ) : (
                   expenses.map((txn) => (
-                    <tr key={txn._id} className="hover:bg-gray-600">
-                      <td className="py-4 px-6 text-sm text-gray-200">
+                    <tr key={txn._id} className="hover:bg-gray-100">
+                      <td className="py-4 px-6 text-sm text-gray-800">
                         {txn.description}
                       </td>
                       <td
                         className={`py-4 px-6 text-sm ${
-                          txn.amount > 0 ? "text-red-500" : "text-red-500"
+                          txn.amount < 0 ? "text-red-500" : "text-red-500"
                         }`}
                       >
                         {txn.amount < 0
                           ? `₹${Math.abs(txn.amount)}`
                           : `₹${txn.amount}`}
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-400">
+                      <td className="py-4 px-6 text-sm text-gray-600">
                         {new Date(txn.expenseDate).toLocaleDateString()}{" "}
-                        {/* Updated field name */}
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-400">
-                        {txn.category.name} {/* Display the category name */}
+                      <td className="py-4 px-6 text-sm text-gray-600">
+                        {txn.category.name}
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-400 flex items-center">
+                      <td className="py-4 px-6 text-sm text-gray-600 flex items-center">
                         <button
-                          className="text-blue-500 hover:text-blue-400 mr-3"
+                          className="text-blue-600 hover:text-blue-500 mr-3"
                           onClick={() => navigate(`/edit-expense/${txn._id}`)}
                         >
                           <FaEdit />
                         </button>
                         <button
-                          className="text-red-500 hover:text-red-400"
+                          className="text-red-600 hover:text-red-500"
                           onClick={() => handleDelete(txn._id)}
                         >
                           <FaTrash />

@@ -70,20 +70,20 @@ const UserProfile = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-900">
-        <p className="text-gray-300 text-lg">Loading profile...</p>
+      <div className="flex justify-center items-center min-h-screen bg-white">
+        <p className="text-gray-700 text-lg">Loading profile...</p>
       </div>
     );
   }
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <div className="flex bg-gray-900 min-h-screen">
+    <div className="flex bg-gray-100 min-h-screen">
       <Sidebar /> {/* Include the Sidebar here */}
-      <div className="flex-grow flex items-center justify-center p-5">
+      <div className="flex-grow flex items-center justify-center p-5 bg-gray-300">
         <ToastContainer />
-        <div className="w-full max-w-4xl p-8 bg-gray-800 rounded-lg shadow-lg">
-          <h1 className="text-4xl font-bold text-white text-center mb-8">
+        <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-lg ">
+          <h1 className="text-4xl font-bold text-gray-800 text-center mb-8">
             User Profile
           </h1>
           <div className="flex justify-center mb-6">
@@ -97,29 +97,29 @@ const UserProfile = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-gray-300 text-lg">Name</label>
+                <label className="block text-gray-800 text-lg">Name</label>
                 <input
                   type="text"
                   name="name"
                   value={user.name}
                   onChange={(e) => setUser({ ...user, name: e.target.value })}
-                  className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-200 p-3 transition duration-200"
+                  className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-800 p-3 transition duration-200"
                   required
                 />
               </div>
               <div>
-                <label className="block text-gray-300 text-lg">Email</label>
+                <label className="block text-gray-800 text-lg">Email</label>
                 <input
                   type="email"
                   name="email"
                   value={user.email}
                   onChange={(e) => setUser({ ...user, email: e.target.value })}
-                  className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-200 p-3 transition duration-200"
+                  className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-800 p-3 transition duration-200"
                   required
                 />
               </div>
               <div>
-                <label className="block text-gray-300 text-lg">
+                <label className="block text-gray-800 text-lg">
                   Date of Birth
                 </label>
                 <input
@@ -127,11 +127,11 @@ const UserProfile = () => {
                   name="dob"
                   value={user.dob}
                   onChange={(e) => setUser({ ...user, dob: e.target.value })}
-                  className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-200 p-3 transition duration-200"
+                  className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-800 p-3 transition duration-200"
                 />
               </div>
               <div>
-                <label className="block text-gray-300 text-lg">
+                <label className="block text-gray-800 text-lg">
                   Phone Number
                 </label>
                 <input
@@ -139,11 +139,11 @@ const UserProfile = () => {
                   name="phone"
                   value={user.phone}
                   onChange={(e) => setUser({ ...user, phone: e.target.value })}
-                  className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-200 p-3 transition duration-200"
+                  className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-800 p-3 transition duration-200"
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-gray-300 text-lg">Address</label>
+                <label className="block text-gray-800 text-lg">Address</label>
                 <input
                   type="text"
                   name="address"
@@ -151,7 +151,7 @@ const UserProfile = () => {
                   onChange={(e) =>
                     setUser({ ...user, address: e.target.value })
                   }
-                  className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-200 p-3 transition duration-200"
+                  className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-lg shadow-md focus:border-blue-400 focus:ring focus:ring-blue-300 text-gray-800 p-3 transition duration-200"
                 />
               </div>
             </div>

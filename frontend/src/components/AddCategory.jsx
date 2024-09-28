@@ -35,9 +35,7 @@ const AddCategory = ({ onCategoryAdded }) => {
   return (
     <div className="mb-4">
       <form onSubmit={handleSubmit}>
-        <label className="block text-sm font-medium text-white">
-          New Category
-        </label>
+        <br />
         <input
           type="text"
           value={name}
@@ -48,7 +46,7 @@ const AddCategory = ({ onCategoryAdded }) => {
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         <button
           type="submit"
-          className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+          className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-700 hover:bg-indigo-700"
           disabled={loading}
         >
           {loading ? "Adding..." : "Add Category"}

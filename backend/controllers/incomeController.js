@@ -32,6 +32,20 @@ const getIncome = async (req, res) => {
   }
 };
 
+const getRecentIncome = async (req, res) => {
+  try {
+    const recentIncome = await Income.find().sort({ date: -1 }).limit(3);
+
+    if (recentIncome.length === 0) {
+      return res.status(404).json({ message: "No income found for this user" });
+    }
+
+    res.json(recentIncome);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching income", error });
+  }
+};
+
 const updateIncome = async (req, res) => {
   const incomeId = req.params.id;
   const { amount, date, source } = req.body;
@@ -72,4 +86,10 @@ const deleteIncome = async (req, res) => {
   }
 };
 
-module.exports = { addIncome, getIncome, updateIncome, deleteIncome };
+module.exports = {
+  addIncome,
+  getIncome,
+  getRecentIncome,
+  updateIncome,
+  deleteIncome,
+};

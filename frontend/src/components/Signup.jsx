@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { registerUser } from "../api/authService";
 import { useNavigate } from "react-router-dom";
+import "./Signup.css"; // Import CSS file for custom styles
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -38,55 +39,45 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 bg-opacity-80 rounded-lg shadow-xl">
-        <h2 className="text-center text-3xl font-extrabold text-white">
+    <div className="min-h-screen bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center p-4">
+      <div className="w-full max-w-md p-10 space-y-6 bg-white shadow-lg rounded-lg signup-card">
+        <h2 className="text-center text-3xl font-extrabold text-gray-700 animate-fade-in">
           Sign Up
         </h2>
-        {}
         {success && <div className="text-green-500 text-center">{success}</div>}
         {error && <div className="text-red-500 text-center">{error}</div>}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            <div>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="w-full px-4 py-3 rounded-md border border-gray-600 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
-                placeholder="Name"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="w-full px-4 py-3 rounded-md border border-gray-600 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
-                placeholder="Email address"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="w-full px-4 py-3 rounded-md border border-gray-600 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
-                placeholder="Password"
-                onChange={handleChange}
-              />
-            </div>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              className="input-field"
+              placeholder="Name"
+              onChange={handleChange}
+            />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              className="input-field"
+              placeholder="Email address"
+              onChange={handleChange}
+            />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              className="input-field"
+              placeholder="Password"
+              onChange={handleChange}
+            />
           </div>
 
-          <button
-            type="submit"
-            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md bg-gradient-to-r from-white to-gray-300 text-black hover:from-gray-100 hover:to-gray-400 shadow-lg transition-all ease-in-out duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-          >
+          <button type="submit" className="submit-button">
             Sign Up
           </button>
         </form>

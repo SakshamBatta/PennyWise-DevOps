@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { loginUser } from "../api/authService"; 
 import { useNavigate } from "react-router-dom";
+import "./Login.css"; // Import CSS file for custom styles
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -9,11 +10,13 @@ export default function Login() {
   });
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     try {
       const response = await loginUser(formData); 
       localStorage.setItem("authToken", response.token); 
@@ -21,6 +24,8 @@ export default function Login() {
     } catch (error) {
       setError("Invalid credentials");
       console.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -33,40 +38,36 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 bg-opacity-80 rounded-lg shadow-xl">
-        <h2 className="text-center text-3xl font-extrabold text-white">
-          Login
+    <div className="min-h-screen bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center p-4">
+      <div className="w-full max-w-md p-10 space-y-6 bg-white shadow-lg rounded-lg login-card">
+        <h2 className="text-center text-3xl font-extrabold text-gray-700">
+          Log In
         </h2>
         {error && <div className="text-red-500 text-center">{error}</div>}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div>
+        <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+          <div className="space-y-4">
             <input
               id="email"
               name="email"
               type="email"
               required
-              className="w-full px-4 py-3 rounded-md border border-gray-600 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+              className="input-field"
               placeholder="Email address"
               onChange={handleChange}
             />
-          </div>
-          <div>
             <input
               id="password"
               name="password"
               type="password"
               required
-              className="w-full px-4 py-3 rounded-md border border-gray-600 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+              className="input-field"
               placeholder="Password"
               onChange={handleChange}
             />
           </div>
-          <button
-            type="submit"
-            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md bg-gradient-to-r from-white to-gray-300 text-black hover:from-gray-100 hover:to-gray-400 shadow-lg transition-all ease-in-out duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-          >
-            Log In
+
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? "Logging In..." : "Log In"}
           </button>
         </form>
       </div>

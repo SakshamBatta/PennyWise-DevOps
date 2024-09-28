@@ -11,6 +11,8 @@ import AddExpense from "./components/AddExpense";
 import Income from "./components/Income";
 import AddIncome from "./components/AddIncome";
 import EditExpense from "./components/EditExpense";
+import LandingPage from "./components/LandingPage";
+import ReportPage from "./components/ReportPage";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/edit-expense/:id" element={<EditExpense />} />
         <Route path="/income" element={<Income />} />
         <Route path="/add-income" element={<AddIncome />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/reports" element={<ReportPage />} />
 
         <Route
           path="/dashboard"

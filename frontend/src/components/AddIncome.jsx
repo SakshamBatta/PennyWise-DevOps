@@ -29,14 +29,14 @@ export default function AddIncome() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200 flex items-center justify-center">
-      <div className="w-full max-w-xl bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold text-gray-100 mb-6 text-center">
+    <div className="min-h-screen bg-gray-200 flex items-center justify-center py-10">
+      <div className="w-full max-w-lg bg-white shadow-xl rounded-2xl p-10 transform transition-all hover:scale-105">
+        <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center">
           Add New Income
         </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label className="block text-gray-400 mb-2 text-sm uppercase tracking-wide">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-gray-700 text-sm font-semibold mb-2">
               Source
             </label>
             <input
@@ -44,13 +44,13 @@ export default function AddIncome() {
               name="source"
               value={formData.source}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
               placeholder="Enter income source"
               required
             />
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-400 mb-2 text-sm uppercase tracking-wide">
+          <div>
+            <label className="block text-gray-700 text-sm font-semibold mb-2">
               Amount (₹)
             </label>
             <input
@@ -58,13 +58,13 @@ export default function AddIncome() {
               name="amount"
               value={formData.amount}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
               placeholder="Enter amount"
               required
             />
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-400 mb-2 text-sm uppercase tracking-wide">
+          <div>
+            <label className="block text-gray-700 text-sm font-semibold mb-2">
               Date
             </label>
             <input
@@ -72,7 +72,7 @@ export default function AddIncome() {
               name="date"
               value={formData.date}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
               required
             />
           </div>
