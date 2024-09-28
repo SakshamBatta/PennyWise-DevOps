@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "./SideBar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
@@ -12,6 +12,7 @@ export default function Income() {
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_BASE_URL;
 
   // Fetch income entries
   const fetchIncomeEntries = async () => {
@@ -22,12 +23,9 @@ export default function Income() {
         return;
       }
 
-      const response = await axios.get(
-        "http://localhost:3000/api/income/get/all",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${apiURL}/api/income/get/all`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setIncomeEntries(response.data);
       setLoading(false);
     } catch (error) {
@@ -42,7 +40,7 @@ export default function Income() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("authToken");
-      await axios.delete(`http://localhost:3000/api/income/delete/${id}`, {
+      await axios.delete(`${apiURL}/api/income/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setIncomeEntries(incomeEntries.filter((txn) => txn._id !== id));
@@ -62,7 +60,7 @@ export default function Income() {
     try {
       const token = localStorage.getItem("authToken");
       await axios.put(
-        `http://localhost:3000/api/income/update/${selectedEntry._id}`,
+        `${apiURL}/api/income/update/${selectedEntry._id}`,
         { amount, source },
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -12,6 +12,7 @@ export default function EditExpense() {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const { id } = useParams(); // Fetch the expense ID from the URL
+  const apiURL = import.meta.env.VITE_BASE_URL;
 
   // Fetch the available categories
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function EditExpense() {
       try {
         const token = localStorage.getItem("authToken");
         const response = await axios.get(
-          "http://localhost:3000/api/category/get",
+          `${apiURL}/api/category/get`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -39,7 +40,7 @@ export default function EditExpense() {
       try {
         const token = localStorage.getItem("authToken");
         const response = await axios.get(
-          `http://localhost:3000/api/expense/get/${id}`,
+          `${apiURL}/api/expense/get/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -63,7 +64,7 @@ export default function EditExpense() {
     try {
       const token = localStorage.getItem("authToken");
       await axios.put(
-        `http://localhost:3000/api/expense/update/${id}`,
+        `${apiURL}/api/expense/update/${id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

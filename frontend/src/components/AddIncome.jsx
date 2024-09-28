@@ -9,6 +9,7 @@ export default function AddIncome() {
     date: "",
   });
   const navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_BASE_URL;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +20,7 @@ export default function AddIncome() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
-      await axios.post("http://localhost:3000/api/income/create", formData, {
+      await axios.post(`${apiURL}/api/income/create`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       navigate("/income");

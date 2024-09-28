@@ -8,7 +8,7 @@ import {
   FaDollarSign,
 } from "react-icons/fa";
 
-export default function Sidebar() {
+export default function SideBar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {

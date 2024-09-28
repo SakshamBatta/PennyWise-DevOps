@@ -6,6 +6,7 @@ export default function Income() {
   const [incomes, setIncomes] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_BASE_URL;
 
   // Fetch income history
   const fetchIncomes = async () => {
@@ -16,7 +17,7 @@ export default function Income() {
         return;
       }
 
-      const response = await axios.get("http://localhost:3000/api/income", {
+      const response = await axios.get(`${apiURL}/api/income`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setIncomes(response.data);

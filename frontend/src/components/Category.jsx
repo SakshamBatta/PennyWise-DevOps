@@ -3,7 +3,7 @@ import axios from "axios";
 import AddCategory from "./AddCategory";
 import EditCategory from "./EditCategory";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import Sidebar from "./SideBar";
 import "./Category.css"; // Adjust styles if needed
 
 const Category = () => {
@@ -15,6 +15,7 @@ const Category = () => {
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     fetchCategories();
@@ -28,14 +29,11 @@ const Category = () => {
         return;
       }
 
-      const response = await axios.get(
-        "http://localhost:3000/api/category/get",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${apiURL}/api/category/get`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setCategories(response.data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -62,7 +60,7 @@ const Category = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.put(
-        `http://localhost:3000/api/category/update/${updatedCategory.id}`,
+        `${apiURL}/api/category/update/${updatedCategory.id}`,
         updatedCategory,
         {
           headers: {
@@ -86,14 +84,11 @@ const Category = () => {
   const handleDeleteCategory = async (categoryId) => {
     try {
       const token = localStorage.getItem("authToken");
-      await axios.delete(
-        `http://localhost:3000/api/category/delete/${categoryId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.delete(`${apiURL}/api/category/delete/${categoryId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setCategories(categories.filter((cat) => cat.id !== categoryId));
     } catch (error) {
       console.error("Error deleting category:", error);

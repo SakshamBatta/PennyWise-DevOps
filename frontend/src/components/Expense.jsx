@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "./SideBar";
 import axios from "axios";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ export default function Expense() {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_BASE_URL;
 
   const fetchExpenses = async () => {
     try {
@@ -17,12 +18,9 @@ export default function Expense() {
         return;
       }
 
-      const response = await axios.get(
-        "http://localhost:3000/api/expense/user/get",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${apiURL}/api/expense/user/get`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setExpenses(response.data);
     } catch (error) {
       console.log(error.message);
@@ -34,7 +32,7 @@ export default function Expense() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("authToken");
-      await axios.delete(`http://localhost:3000/api/expense/delete/${id}`, {
+      await axios.delete(`${apiURL}/api/expense/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setExpenses(expenses.filter((txn) => txn._id !== id));

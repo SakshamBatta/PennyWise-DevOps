@@ -7,6 +7,7 @@ const AddCategory = ({ onCategoryAdded }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const apiUrl = import.meta.env.VITE_BASE_URL;
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -15,7 +16,7 @@ const AddCategory = ({ onCategoryAdded }) => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.post(
-        "http://localhost:3000/api/category/create",
+        `${apiUrl}/api/category/create`,
         { name },
         {
           headers: {

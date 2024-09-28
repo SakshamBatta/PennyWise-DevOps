@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Sidebar from "./Sidebar"; // Import the Sidebar component
+import Sidebar from "./SideBar"; // Import the Sidebar component
 
 const UserProfile = () => {
   const [user, setUser] = useState({
@@ -16,6 +16,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -25,12 +26,9 @@ const UserProfile = () => {
           navigate("/login");
           return;
         }
-        const response = await axios.get(
-          "http://localhost:3000/api/users/profile",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await axios.get(`${apiURL}/api/users/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         const formattedDob = new Date(response.data.dob)
           .toISOString()
@@ -58,7 +56,7 @@ const UserProfile = () => {
         navigate("/login");
         return;
       }
-      await axios.put("http://localhost:3000/api/users/profile", user, {
+      await axios.put(`${apiURL}/api/users/profile`, user, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Profile updated successfully!");

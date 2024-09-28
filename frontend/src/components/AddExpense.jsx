@@ -11,18 +11,16 @@ export default function AddExpense() {
   });
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_BASE_URL;
 
   // Fetch available categories from the backend
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await axios.get(
-          "http://localhost:3000/api/category/get",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await axios.get(`${apiURL}/api/category/get`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setCategories(response.data);
       } catch (error) {
         console.error("Failed to fetch categories:", error.message);
@@ -41,7 +39,7 @@ export default function AddExpense() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
-      await axios.post("http://localhost:3000/api/expense/create", formData, {
+      await axios.post(`${apiURL}/api/expense/create`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       navigate("/expense");

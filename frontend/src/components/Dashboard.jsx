@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "./SideBar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Pie, Bar } from "react-chartjs-2";
@@ -34,6 +34,7 @@ export default function Dashboard() {
   const [totalExpense, setTotalExpense] = useState(0.0);
   const [balance, setBalance] = useState(0.0);
   const navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_BASE_URL;
 
   const totalIncomeCalculator = async () => {
     try {
@@ -43,12 +44,9 @@ export default function Dashboard() {
         return;
       }
 
-      const response = await axios.get(
-        "http://localhost:3000/api/income/get/all",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${apiURL}/api/income/get/all`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       let total = response.data.reduce((acc, inc) => acc + inc.amount, 0);
       setTotalIncome(total);
     } catch (error) {
@@ -64,12 +62,9 @@ export default function Dashboard() {
         return;
       }
 
-      const response = await axios.get(
-        "http://localhost:3000/api/expense/user/get",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${apiURL}/api/expense/user/get`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       let total = response.data.reduce((acc, exp) => acc + exp.amount, 0);
       setTotalExpense(total);
     } catch (error) {
@@ -89,12 +84,9 @@ export default function Dashboard() {
         return;
       }
 
-      const response = await axios.get(
-        "http://localhost:3000/api/category/get",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${apiURL}/api/category/get`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setCategories(response.data);
     } catch (error) {
       console.log(error.message);
@@ -112,7 +104,7 @@ export default function Dashboard() {
       }
 
       const response = await axios.get(
-        "http://localhost:3000/api/expense/user/get/recent",
+        `${apiURL}/api/expense/user/get/recent`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -131,12 +123,9 @@ export default function Dashboard() {
         return;
       }
 
-      const response = await axios.get(
-        "http://localhost:3000/api/income/get/recent",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${apiURL}/api/income/get/recent`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setRecentIncome(response.data);
     } catch (error) {
       console.log("Failed to fetch recent income:", error.message);
