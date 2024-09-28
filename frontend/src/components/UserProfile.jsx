@@ -68,7 +68,13 @@ const UserProfile = () => {
     }
   };
 
-  if (loading) return <div className="text-gray-700">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-900">
+        <p className="text-gray-300 text-lg">Loading profile...</p>
+      </div>
+    );
+  }
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (

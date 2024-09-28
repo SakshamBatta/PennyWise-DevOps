@@ -5,15 +5,15 @@ import {
   FaList,
   FaSignOutAlt,
   FaUser,
+  FaDollarSign, // Import a suitable icon for income
 } from "react-icons/fa";
 
 export default function Sidebar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear authentication token or perform logout logic here
     localStorage.removeItem("authToken");
-    navigate("/login"); // Redirect to login page after logout
+    navigate("/login");
   };
 
   return (
@@ -32,6 +32,14 @@ export default function Sidebar() {
         </li>
         <li className="mb-3 hover:bg-gray-800 rounded">
           <Link
+            to="/income" // Add the income route here
+            className="flex items-center p-2 hover:text-gray-300"
+          >
+            <FaDollarSign className="mr-2" /> Income
+          </Link>
+        </li>
+        <li className="mb-3 hover:bg-gray-800 rounded">
+          <Link
             to="/categories"
             className="flex items-center p-2 hover:text-gray-300"
           >
@@ -40,10 +48,10 @@ export default function Sidebar() {
         </li>
         <li className="mb-3 hover:bg-gray-800 rounded">
           <Link
-            to="/transactions"
+            to="/expense"
             className="flex items-center p-2 hover:text-gray-300"
           >
-            <FaChartBar className="mr-2" /> Transactions
+            <FaChartBar className="mr-2" /> Expenses
           </Link>
         </li>
         <li className="mb-3 hover:bg-gray-800 rounded">
@@ -62,7 +70,6 @@ export default function Sidebar() {
             <FaUser className="mr-2" /> Profile
           </Link>
         </li>
-        {/* Logout option */}
         <li className="mb-3 hover:bg-gray-800 rounded">
           <button
             onClick={handleLogout}

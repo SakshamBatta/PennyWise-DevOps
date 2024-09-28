@@ -1,16 +1,37 @@
 const mongoose = require("mongoose");
 
-const expenseSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  amount: { type: Number, required: true },
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
-    required: true,
+// Define the Transaction Schema
+const expenseSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId, // Reference to the user
+      ref: "User",
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+    },
+    description: {
+      type: String,
+      maxlength: 500, // Optional description with a maximum length
+    },
+    expenseDate: {
+      type: Date,
+      default: Date.now, // Defaults to the current date
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
   },
-  date: { type: Date, required: true },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Expense belongs to a user
-  createdAt: { type: Date, default: Date.now },
-});
+  {
+    timestamps: true, // Automatically adds `createdAt` and `updatedAt` timestamps
+  }
+);
 
-module.exports = mongoose.model("Expense", expenseSchema);
+// Create the Transaction Model
+const Expense = mongoose.model("Expense", expenseSchema);
+
+module.exports = Expense;

@@ -1,0 +1,5 @@
+/* styles.css */
+.modal-open {
+  opacity: 0.5; /* Adjust the opacity level as needed */
+  pointer-events: none; /* Prevent interactions with the background elements */
+}

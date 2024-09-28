@@ -2,16 +2,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function EditTransaction() {
+export default function EditExpense() {
   const [formData, setFormData] = useState({
     description: "",
     amount: 0,
-    transactionDate: "",
+    expenseDate: "",
     category: "",
   });
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-  const { id } = useParams(); // Fetch the transaction ID from the URL
+  const { id } = useParams(); // Fetch the expense ID from the URL
 
   // Fetch the available categories
   useEffect(() => {
@@ -33,24 +33,24 @@ export default function EditTransaction() {
     fetchCategories();
   }, []);
 
-  // Fetch the current transaction details
+  // Fetch the current expense details
   useEffect(() => {
-    const fetchTransaction = async () => {
+    const fetchExpense = async () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await axios.get(
-          `http://localhost:3000/api/transaction/get/${id}`,
+          `http://localhost:3000/api/expense/get/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setFormData(response.data); // Populate form with transaction data
+        setFormData(response.data); // Populate form with expense data
       } catch (error) {
-        console.error("Failed to fetch transaction:", error.message);
+        console.error("Failed to fetch expense:", error.message);
       }
     };
 
-    fetchTransaction();
+    fetchExpense();
   }, [id]);
 
   const handleInputChange = (e) => {
@@ -63,15 +63,15 @@ export default function EditTransaction() {
     try {
       const token = localStorage.getItem("authToken");
       await axios.put(
-        `http://localhost:3000/api/transaction/update/${id}`,
+        `http://localhost:3000/api/expense/update/${id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      navigate("/transactions"); // Redirect after editing
+      navigate("/expense"); // Redirect after editing
     } catch (error) {
-      console.error("Failed to update transaction:", error.message);
+      console.error("Failed to update expense:", error.message);
     }
   };
 
@@ -79,7 +79,7 @@ export default function EditTransaction() {
     <div className="min-h-screen bg-gray-900 text-gray-200 flex items-center justify-center">
       <div className="w-full max-w-xl bg-gray-800 p-8 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-gray-100 mb-6 text-center">
-          Edit Transaction
+          Edit expense
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
@@ -116,8 +116,8 @@ export default function EditTransaction() {
             </label>
             <input
               type="date"
-              name="transactionDate"
-              value={formData.transactionDate}
+              name="expenseDate"
+              value={formData.expenseDate}
               onChange={handleInputChange}
               className="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               required

@@ -1,17 +1,94 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import axios from "axios";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Pie, Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  BarElement,
+  CategoryScale,
+  LinearScale
+);
 
 export default function Dashboard() {
   const [categories, setCategories] = useState([]);
-  const [recentTransactions, setRecentTransactions] = useState([]);
+  const [recentExpenses, setRecentExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCategories, setShowCategories] = useState(false);
+  const [totalIncome, setTotalIncome] = useState(0.0);
+  const [totalExpense, setTotalExpense] = useState(0.0);
+  const [balance, setBalance] = useState(0.0);
   const navigate = useNavigate();
 
-  // Fetch categories
+  const totalIncomeCalculator = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      const response = await axios.get(
+        "http://localhost:3000/api/income/get/all",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      let total = 0;
+      response.data.map((inc) => {
+        total += inc.amount;
+      });
+
+      setTotalIncome(total);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const totalExpenseCalculator = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      const response = await axios.get(
+        "http://localhost:3000/api/expense/user/get",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      let total = 0;
+      response.data.map((exp) => {
+        total += exp.amount;
+      });
+
+      setTotalExpense(total);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const balanceCalculator = async () => {
+    let balance = totalIncome - totalExpense;
+    setBalance(balance);
+  };
+
   const fetchCategories = async () => {
     try {
       const token = localStorage.getItem("authToken");
@@ -34,8 +111,7 @@ export default function Dashboard() {
     }
   };
 
-  // Fetch recent transactions
-  const fetchRecentTransactions = async () => {
+  const fetchRecentExpenses = async () => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -44,70 +120,93 @@ export default function Dashboard() {
       }
 
       const response = await axios.get(
-        "http://localhost:3000/api/transaction/user/get/recent", // Adjust the endpoint to match your backend
+        "http://localhost:3000/api/expense/user/get/recent",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setRecentTransactions(response.data); // Assuming response.data contains the recent transactions
+      setRecentExpenses(response.data);
     } catch (error) {
-      console.log("Failed to fetch recent transactions:", error.message);
+      console.log("Failed to fetch recent expenses:", error.message);
     }
   };
 
   useEffect(() => {
+    balanceCalculator();
+  }, [totalExpense, totalIncome]);
+
+  useEffect(() => {
     fetchCategories();
-    fetchRecentTransactions(); // Fetch recent transactions on component mount
+    fetchRecentExpenses();
+    totalIncomeCalculator();
+    totalExpenseCalculator();
   }, []);
 
+  const pieData = {
+    labels: ["Income", "Expenses", "Balance"],
+    datasets: [
+      {
+        label: "Financial Summary",
+        data: [totalIncome, totalExpense, balance],
+        backgroundColor: ["#00C9A7", "#FF6F61", "#3B82F6"],
+        borderColor: ["#00C9A7", "#FF6F61", "#3B82F6"],
+        borderWidth: 1,
+        hoverOffset: 4,
+      },
+    ],
+  };
+
+  const barData = {
+    labels: ["Income", "Expenses", "Balance"],
+    datasets: [
+      {
+        label: "Amount in ₹",
+        data: [totalIncome, totalExpense, balance],
+        backgroundColor: ["#00C9A7", "#FF6F61", "#3B82F6"],
+        borderColor: ["#00C9A7", "#FF6F61", "#3B82F6"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
-    <div className="flex min-h-screen bg-gray-900 text-gray-200">
+    <div className="flex min-h-screen bg-gray-800 text-gray-100">
       <Sidebar
         categories={categories}
         loading={loading}
         showCategories={showCategories}
         setShowCategories={setShowCategories}
       />
-      <div className="flex-grow p-10 bg-gray-800">
+      <div className="flex-grow p-10">
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {[
             {
               title: "Income",
-              amount: "₹0.00",
-              change: "+12% from last month",
-              icon: <FaArrowUp className="mr-1" />,
-              color: "bg-green-600",
+              amount: `₹${totalIncome}`,
+              color: "bg-gradient-to-r from-teal-400 to-green-500",
               imgSrc: "/income.png",
             },
             {
               title: "Expenses",
-              amount: "₹0.00",
-              change: "-8% from last month",
-              icon: <FaArrowDown className="mr-1" />,
-              color: "bg-red-600",
+              amount: `₹${totalExpense}`,
+              color: "bg-gradient-to-r from-red-500 to-pink-600",
               imgSrc: "/expenses.png",
             },
             {
               title: "Balance",
-              amount: "₹0.00",
-              change: "+5% from last month",
-              icon: <FaArrowUp className="mr-1" />,
-              color: "bg-blue-600",
+              amount: `₹${balance}`,
+              color: "bg-gradient-to-r from-blue-500 to-indigo-600",
               imgSrc: "/balance.png",
             },
           ].map((card, index) => (
             <div
               key={index}
-              className={`shadow-lg rounded-lg p-4 flex items-center justify-between transition-transform transform hover:scale-105 hover:shadow-xl text-white ${card.color}`}
+              className={`shadow-lg rounded-lg p-6 flex items-center justify-between transition-transform transform hover:scale-105 hover:shadow-2xl text-white ${card.color}`}
             >
               <div>
-                <h2 className="text-lg font-medium">{card.title}</h2>
-                <p className="text-3xl font-bold">{card.amount}</p>
-                <div className="flex items-center mt-2">
-                  {card.icon}
-                  <span className="text-sm">{card.change}</span>
-                </div>
+                <h2 className="text-xl font-medium">{card.title}</h2>
+                <p className="text-4xl font-bold">{card.amount}</p>
               </div>
               <img src={card.imgSrc} alt={card.title} className="w-12 h-12" />
             </div>
@@ -115,21 +214,46 @@ export default function Dashboard() {
         </div>
 
         {/* Chart Section */}
-        <div className="bg-gray-700 shadow-lg rounded-lg p-4 mb-4">
-          <h2 className="text-lg font-bold text-gray-100 mb-2">
-            Performance Overview
-          </h2>
-          <div className="h-48 bg-gray-600 flex items-center justify-center">
-            <span className="text-gray-400">
-              Chart will be implemented here
-            </span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Pie Chart */}
+          <div className="bg-gray-700 shadow-lg rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-100 mb-4">
+              Financial Overview (Pie Chart)
+            </h2>
+            <div className="h-56 flex items-center justify-center">
+              <Pie
+                data={pieData}
+                options={{
+                  plugins: { legend: { labels: { color: "white" } } },
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Bar Chart */}
+          <div className="bg-gray-700 shadow-lg rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-100 mb-4">
+              Financial Overview (Bar Chart)
+            </h2>
+            <div className="h-56 flex items-center justify-center">
+              <Bar
+                data={barData}
+                options={{
+                  scales: {
+                    y: { ticks: { color: "white" } },
+                    x: { ticks: { color: "white" } },
+                  },
+                  plugins: { legend: { labels: { color: "white" } } },
+                }}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Recent Transactions */}
-        <div className="bg-gray-700 shadow-lg rounded-lg p-6">
-          <h2 className="text-xl font-bold text-gray-100 mb-4">
-            Recent Transactions
+        {/* Recent expenses */}
+        <div className="bg-gray-700 shadow-lg rounded-lg p-6 mt-8">
+          <h2 className="text-xl font-semibold text-gray-100 mb-4">
+            Recent Expenses
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left">
@@ -148,39 +272,32 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentTransactions.length === 0 ? (
+                {recentExpenses.length === 0 ? (
                   <tr>
                     <td
                       colSpan="4"
                       className="text-center py-4 px-6 text-gray-400"
                     >
-                      No recent transactions available.
+                      No recent expenses available.
                     </td>
                   </tr>
                 ) : (
-                  recentTransactions.map((transaction, index) => (
-                    <tr key={index} className="hover:bg-gray-600">
-                      <td className="py-4 px-6 text-sm text-gray-200">
-                        {transaction.description}
+                  recentExpenses.map((expense, index) => (
+                    <tr
+                      key={index}
+                      className="border-b border-gray-600 hover:bg-gray-600 transition-colors"
+                    >
+                      <td className="py-4 px-6 text-gray-300">
+                        {expense.description}
                       </td>
-                      <td
-                        className={`py-4 px-6 text-sm ${
-                          transaction.amount < 0
-                            ? "text-red-300"
-                            : "text-green-300"
-                        }`}
-                      >
-                        {transaction.amount < 0
-                          ? `₹${Math.abs(transaction.amount)}`
-                          : `₹${transaction.amount}`}
+                      <td className="py-4 px-6 text-gray-300">
+                        ₹{expense.amount}
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-400">
-                        {new Date(
-                          transaction.transactionDate
-                        ).toLocaleDateString()}
+                      <td className="py-4 px-6 text-gray-300">
+                        {new Date(expense.expenseDate).toLocaleDateString()}
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-400">
-                        {transaction.category.name}
+                      <td className="py-4 px-6 text-gray-300">
+                        {expense.category.name}
                       </td>
                     </tr>
                   ))

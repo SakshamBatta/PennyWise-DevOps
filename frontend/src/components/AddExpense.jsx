@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export default function AddTransaction() {
+export default function AddExpense() {
   const [formData, setFormData] = useState({
     description: "",
     amount: 0,
@@ -41,16 +41,12 @@ export default function AddTransaction() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
-      await axios.post(
-        "http://localhost:3000/api/transaction/create",
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      navigate("/transactions");
+      await axios.post("http://localhost:3000/api/expense/create", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      navigate("/expense");
     } catch (error) {
-      console.error("Failed to add transaction:", error.message);
+      console.error("Failed to add expense:", error.message);
     }
   };
 
@@ -58,7 +54,7 @@ export default function AddTransaction() {
     <div className="min-h-screen bg-gray-900 text-gray-200 flex items-center justify-center">
       <div className="w-full max-w-xl bg-gray-800 p-8 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-gray-100 mb-6 text-center">
-          Add New Transaction
+          Add New Expense
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
@@ -125,7 +121,7 @@ export default function AddTransaction() {
             type="submit"
             className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-500 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
           >
-            Add Transaction
+            Add Expense
           </button>
         </form>
       </div>
