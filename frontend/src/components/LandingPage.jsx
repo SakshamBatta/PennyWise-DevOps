@@ -67,7 +67,7 @@ export default function LandingPage() {
 
         <div className="container mx-auto flex flex-col items-center justify-center h-full relative z-10">
           <h1 className="text-5xl font-extrabold text-center leading-tight animate-fade-in">
-            Manage Your Finances Like a Pro
+            Welcome to PennyWise
           </h1>
           <p className="mt-4 text-lg max-w-2xl text-center opacity-90 animate-slide-up">
             Track, analyze, and control your expenses effortlessly.
@@ -130,26 +130,28 @@ export default function LandingPage() {
       <section className="py-20 bg-gray-100 text-center">
         <div className="container mx-auto">
           <h2 className="text-4xl font-bold mb-10">Your Financial Growth</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 ">
             {[
               {
                 color: "bg-blue-500",
-                height: "70",
+                height: "150",
+                value: "70",
                 label: "Monthly Income Growth",
               },
               {
                 color: "bg-green-500",
-                height: "50",
+                height: "100",
+                value: "50",
                 label: "Expenses Reduced",
               },
-            ].map(({ color, height, label }) => (
+            ].map(({ color, height, value, label }) => (
               <div key={label} className="relative">
                 <div
                   className={`chart ${color} rounded-lg w-40 mx-auto`}
                   data-height={height}
                 >
-                  <span className="absolute text-white text-lg font-semibold bottom-0 left-1/2 transform -translate-x-1/2 mb-2">
-                    {height}%
+                  <span className="absolute text-white text-lg font-semibold bottom-0 left-1/2 transform -translate-x-1/2 mb-2 ">
+                    {value}%
                   </span>
                 </div>
                 <p className="mt-4">{label}</p>
@@ -211,7 +213,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="bg-gray-800 py-6 text-white text-center">
-        <p>&copy; 2024 Expense Tracker. All rights reserved.</p>
+        <p>&copy; 2024 PennyWise. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -320,7 +320,7 @@ export default function Dashboard() {
             Recent Income
           </h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full text-left">
+            <table className="min-w-full text-left ">
               <thead>
                 <tr className="border-b border-gray-600 text-center">
                   {["Source", "Amount", "Date"].map((header) => (
